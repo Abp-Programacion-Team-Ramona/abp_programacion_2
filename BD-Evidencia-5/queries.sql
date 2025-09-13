@@ -1,9 +1,31 @@
+
+
+CREATE TABLE usuarios (
+    id CHAR(36) PRIMARY KEY,
+    correo VARCHAR(100) NOT NULL,
+    nombre VARCHAR(100) NOT NULL,
+    contraseña VARCHAR(100) NOT NULL,
+    rol VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE viviendas (
+    id CHAR(36) PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    id_usuario CHAR(36) NOT NULL,
+    calle VARCHAR(100) NOT NULL,
+    altura VARCHAR(20) NOT NULL,
+    piso VARCHAR(20),
+    nota VARCHAR(255),
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE
+);
+
 CREATE TABLE rutinas (
     id CHAR(36) PRIMARY KEY,
     horario_inicio DATETIME NOT NULL,
     horario_apagado DATETIME NOT NULL,
     horario_encendido DATETIME NOT NULL,
-    estado_rutina BOOLEAN NOT NULL
+    estado_dispositivo BOOLEAN NOT NULL
+);
 
 CREATE TABLE dispositivos (
     id CHAR(36) PRIMARY KEY,
@@ -14,6 +36,15 @@ CREATE TABLE dispositivos (
     FOREIGN KEY (id_vivienda) REFERENCES viviendas(id) ON DELETE CASCADE,
     FOREIGN KEY (id_rutina) REFERENCES rutinas(id) ON DELETE SET NULL
 );
+
+CREATE TABLE historiales (
+    id CHAR(36) PRIMARY KEY,
+    id_dispositivo CHAR(36) NOT NULL,
+    fecha DATETIME NOT NULL,
+    descripcion VARCHAR(255) NOT NULL,
+    FOREIGN KEY (id_dispositivo) REFERENCES dispositivos(id) ON DELETE CASCADE
+);
+
 
 INSERT INTO dispositivos (id, id_vivienda, id_rutina, tipo_dispositivo, estado) VALUES
 ('99999999-1111-1111-1111-999999999999', '33333333-3333-3333-3333-333333333333', '55555555-5555-5555-5555-555555555555', 'aire', true),

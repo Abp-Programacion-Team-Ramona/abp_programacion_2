@@ -2,7 +2,7 @@ import uuid
 from dispositivo import Dispositivo
 
 class AireAcondicionado(Dispositivo):
-    def __init__(self, id_vivienda: uuid.UUID, id_rutina: uuid.UUID = None, rutina=None):
+    def __init__(self, id_vivienda, id_rutina: uuid.UUID = None, rutina=None):
         super().__init__(id_vivienda, id_rutina, rutina)
         self.temperatura = 24
         self.velocidad = 1

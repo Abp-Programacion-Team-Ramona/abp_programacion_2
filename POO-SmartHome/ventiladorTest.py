@@ -1,10 +1,11 @@
 import unittest
+import uuid
 from ventilador import Ventilador
 
 class ventiladorTest(unittest.TestCase):
 
     def setUp(self):
-        self.ventilador = Ventilador(id_vivienda="Vivienda_1", id_rutina="Rutina_1", rutina="Rutina Test")
+        self.ventilador = Ventilador(uuid.uuid4(),uuid.uuid4(),None)
 
     def test_inicializacion(self):
         self.assertIsNotNone(self.ventilador.id_vivienda, "El id_vivienda no puede ser None")

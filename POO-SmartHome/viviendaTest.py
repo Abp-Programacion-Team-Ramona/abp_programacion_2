@@ -1,10 +1,11 @@
 import unittest
 from vivienda import Vivienda
 
+
 class viviendaTest(unittest.TestCase):
 
     def setUp(self):
-        self.vivienda = Vivienda("Casa Central", "usuario1", "San Martín", "123")
+        self.vivienda = Vivienda("Casa Central", "usuario1", "San Martín", "123", "piso", "")
 
     def test_no_agregar_dispositivo_duplicado(self):
         self.vivienda.agregar_dispositivo("ventilador")
@@ -20,6 +21,7 @@ class viviendaTest(unittest.TestCase):
         self.vivienda.agregar_dispositivo("camara")
         self.vivienda.quitar_dispositivo("ventilador")
         self.assertEqual(len(self.vivienda.dispositivos), 1)
+
 
 if __name__ == "__main__":
     unittest.main()
