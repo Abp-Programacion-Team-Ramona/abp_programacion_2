@@ -1,6 +1,7 @@
 import uuid
 from dispositivo import Dispositivo
 
+
 class AireAcondicionado(Dispositivo):
     def __init__(self, id_vivienda, id_rutina: uuid.UUID = None, rutina=None):
         super().__init__(id_vivienda, id_rutina, rutina)
@@ -18,11 +19,14 @@ class AireAcondicionado(Dispositivo):
         return self.modo
 
     def encender(self):
-        print("Encendiendo Aire Acondicionado")
+        if not self.estado:
+            print("Encendiendo Aire Acondicionado")
+        print("El aire acondicionado ya esta encendido")
 
     def apagar(self):
-        print("Apoagando Aire Acondicionado")
-
+        if not self.estado:
+            print("Apagando Aire Acondicionado")
+        print("El aire acondicionado ya esta apagado.")
 
     def setTemperatura(self, temperatura: int):
         if 16 <= temperatura <= 30:
@@ -42,4 +46,3 @@ class AireAcondicionado(Dispositivo):
             self.modo = modo.lower()
         else:
             raise ValueError(f"Modo inválido. Debe ser uno de {modos_validos}")
-

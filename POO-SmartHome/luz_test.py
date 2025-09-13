@@ -2,6 +2,7 @@ import unittest
 import uuid
 from luz import Luz
 
+
 class TestLuz(unittest.TestCase):
 
     def setUp(self):
@@ -30,6 +31,7 @@ class TestLuz(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             self.luz.setIntensidad(0)
+
 
 if __name__ == '__main__':
     unittest.main()

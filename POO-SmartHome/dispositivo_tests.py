@@ -2,12 +2,14 @@ import unittest
 import uuid
 from dispositivo import Dispositivo
 
+
 class DispositivoConcreto(Dispositivo):
     def encender(self):
         self._estado = True
 
     def apagar(self):
         self._estado = False
+
 
 class TestDispositivo(unittest.TestCase):
     def setUp(self):

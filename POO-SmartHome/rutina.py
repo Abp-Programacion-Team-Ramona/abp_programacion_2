@@ -1,6 +1,7 @@
 import uuid
 
-class Rutina: 
+
+class Rutina:
     def __init__(self, horario_inicio, horario_apagado, horario_encendido, estado_rutina):
         self._id = uuid.uuid4()
         self._horario_inicio = horario_inicio

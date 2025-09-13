@@ -1,8 +1,9 @@
 import uuid
 from dispositivo import Dispositivo
 
+
 class Luz(Dispositivo):
-    def __init__(self,  id_vivienda: uuid.UUID, id_rutina: uuid.UUID = None, rutina=None):
+    def __init__(self, id_vivienda: uuid.UUID, id_rutina: uuid.UUID = None, rutina=None):
         super().__init__(id_vivienda, id_rutina, rutina)
         self.modo = "apagado"
         self.intensidad = 1

@@ -1,19 +1,20 @@
 import uuid
 
+
 class Vivienda:
 
     def __init__(self, nombre, id_usuario, calle, altura, piso, nota):
-        self._id = uuid.uuid4()  
+        self._id = uuid.uuid4()
         self._nombre = nombre
         self._id_usuario = id_usuario
         self._calle = calle
         self._altura = altura
         self._piso = piso
         self._nota = nota
-        self._dispositivos = [] 
+        self._dispositivos = []
 
     @property
-    def id(self): 
+    def id(self):
         return self._id
 
     @property

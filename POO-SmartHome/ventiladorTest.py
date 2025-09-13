@@ -2,10 +2,11 @@ import unittest
 import uuid
 from ventilador import Ventilador
 
+
 class ventiladorTest(unittest.TestCase):
 
     def setUp(self):
-        self.ventilador = Ventilador(uuid.uuid4(),uuid.uuid4(),None)
+        self.ventilador = Ventilador(uuid.uuid4(), uuid.uuid4(), None)
 
     def test_inicializacion(self):
         self.assertIsNotNone(self.ventilador.id_vivienda, "El id_vivienda no puede ser None")
@@ -18,7 +19,8 @@ class ventiladorTest(unittest.TestCase):
 
     def test_ajustar_velocidad_invalida(self):
         self.ventilador.ajustar_velocidad(5)
-        self.assertEqual(self.ventilador.velocidad, 0, "La velocidad debería mantenerse en 0 si se ingresa un valor inválido")
+        self.assertEqual(self.ventilador.velocidad, 0,
+                         "La velocidad debería mantenerse en 0 si se ingresa un valor inválido")
 
     def test_ajustar_giro_activado(self):
         self.ventilador.ajustar_giro(True)
@@ -31,6 +33,7 @@ class ventiladorTest(unittest.TestCase):
     def test_ajustar_giro_invalido(self):
         self.ventilador.ajustar_giro("invalid")
         self.assertFalse(self.ventilador.giro, "El giro no debería cambiar si se pasa un valor inválido")
+
 
 if __name__ == "_main_":
     unittest.main()
