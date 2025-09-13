@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 
 
 class Dispositivo(ABC):
-    def _init_(self, id_vivienda: uuid.UUID, id_rutina: uuid.UUID = None, rutina=None):
+    def __init__(self, id_vivienda: uuid.UUID, id_rutina: uuid.UUID = None, rutina=None):
         self._id = uuid.uuid4()
         self._id_vivienda = id_vivienda
         self._id_rutina = id_rutina
