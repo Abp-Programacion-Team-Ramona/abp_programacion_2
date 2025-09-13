@@ -4,8 +4,7 @@ CREATE TABLE rutinas (
     horario_apagado DATETIME NOT NULL,
     horario_encendido DATETIME NOT NULL,
     estado_rutina BOOLEAN NOT NULL
-);
-
+)
 INSERT INTO rutinas (id, horario_inicio, horario_apagado, horario_encendido, estado_rutina) VALUES
 ('55555555-5555-5555-5555-555555555555', '2025-09-10 07:00:00', '2025-09-10 23:00:00', '2025-09-10 07:00:00', true),
 ('66666666-6666-6666-6666-666666666666', '2025-09-10 18:00:00', '2025-09-10 23:30:00', '2025-09-10 18:00:00', true),
