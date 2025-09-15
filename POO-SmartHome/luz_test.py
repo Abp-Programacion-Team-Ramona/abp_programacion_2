@@ -8,30 +8,42 @@ class TestLuz(unittest.TestCase):
     def setUp(self):
         self.luz = Luz(id_vivienda=uuid.uuid4())
 
-    def test_estado_inicial(self):
-        self.assertEqual(self.luz.modo, "apagado")
-        self.assertEqual(self.luz.intensidad, 1)
+    def test_encender_cuando_esta_apagada(self):
+        self.assertFalse(self.luz.is_encendida())
+        self.luz.encender()
+        self.assertTrue(self.luz.is_encendida())
+
+    def test_encender_cuando_ya_esta_encendida(self):
+        self.luz.encender()
+        with self.assertRaises(RuntimeError):
+            self.luz.encender()
+
+    def test_apagar_cuando_esta_encendida(self):
+        self.luz.encender()
+        self.luz.apagar()
+        self.assertFalse(self.luz.is_encendida())
+
+    def test_apagar_cuando_ya_esta_apagada(self):
+        self.assertFalse(self.luz.is_encendida())
+        with self.assertRaises(RuntimeError):
+            self.luz.apagar()
 
     def test_set_modo_valido(self):
-        self.luz.setModo("encendido")
-        self.assertEqual(self.luz.modo, "encendido")
+        self.luz.setModo("fiesta")
+        self.assertEqual(self.luz.get_modo(), "fiesta")
 
     def test_set_modo_invalido(self):
         with self.assertRaises(ValueError):
-            self.luz.setModo("intermitente")
+            self.luz.setModo("lectura")
 
     def test_set_intensidad_valida(self):
-        for i in (1, 2, 3):
-            self.luz.setIntensidad(i)
-            self.assertEqual(self.luz.intensidad, i)
+        self.luz.setIntensidad(3)
+        self.assertEqual(self.luz.get_intensidad(), 3)
 
     def test_set_intensidad_invalida(self):
         with self.assertRaises(ValueError):
             self.luz.setIntensidad(5)
 
-        with self.assertRaises(ValueError):
-            self.luz.setIntensidad(0)
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

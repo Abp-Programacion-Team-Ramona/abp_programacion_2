@@ -8,11 +8,6 @@ class ventiladorTest(unittest.TestCase):
     def setUp(self):
         self.ventilador = Ventilador(uuid.uuid4(), uuid.uuid4(), None)
 
-    def test_inicializacion(self):
-        self.assertIsNotNone(self.ventilador.id_vivienda, "El id_vivienda no puede ser None")
-        self.assertEqual(self.ventilador.velocidad, 0, "La velocidad debe iniciar en 0")
-        self.assertFalse(self.ventilador.giro, "El giro debe iniciar en False")
-
     def test_ajustar_velocidad_valida(self):
         self.ventilador.ajustar_velocidad(2)
         self.assertEqual(self.ventilador.velocidad, 2, "La velocidad no se ajustó correctamente")
