@@ -1,14 +1,24 @@
-import uuid
 from dispositivo import Dispositivo
 
 
 class AireAcondicionado(Dispositivo):
-    def __init__(self, id_vivienda, id_rutina: uuid.UUID = None, rutina=None):
-        super().__init__(id_vivienda, id_rutina, rutina)
-        self.__temperatura = 24
-        self.__velocidad = 1
-        self.__modo = "frio"
-        self.__estado = False
+    tabla = "aires_acondicionados"
+    columnas = ["temperatura", "velocidad", "modo"]
+    modos_validos = ("frio", "calor", "auto", "ventilador")
+
+    def __init__(
+        self,
+        temperatura: int,
+        velocidad: int,
+        modo: str,
+        **kwargs,
+    ):
+        super().__init__(**kwargs)
+        self._temperatura = temperatura
+        self._velocidad = velocidad
+        if str.lower(modo) not in self.modos_validos:
+            raise ValueError(f"Modo inválido: {str.lower(modo)}")
+        self.__modo = modo
 
     def get_temperatura(self):
         return self.__temperatura
@@ -41,10 +51,3 @@ class AireAcondicionado(Dispositivo):
             self.__velocidad = velocidad
         else:
             raise ValueError("La velocidad debe ser 1 (baja), 2 (media) o 3 (alta)")
-
-    def setModo(self, modo: str):
-        modos_validos = ("frio", "calor", "auto", "ventilador")
-        if modo.lower() in modos_validos:
-            self.__modo = modo.lower()
-        else:
-            raise ValueError(f"Modo inválido. Debe ser uno de {modos_validos}")

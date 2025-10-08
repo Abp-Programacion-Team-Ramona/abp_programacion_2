@@ -3,13 +3,24 @@ from abc import ABC, abstractmethod
 
 
 class Dispositivo(ABC):
-    def __init__(self, id_vivienda: uuid.UUID, nombre_dispositivo, id_rutina: uuid.UUID = None, rutina=None):
-        self.__id = uuid.uuid4()
-        self.__nombre_dispositivo = nombre_dispositivo
-        self.__id_vivienda = id_vivienda
-        self.__id_rutina = id_rutina
-        self.__estado = False
-        self.__rutina = rutina
+    tabla = None
+    columnas = []
+
+    def __init__(
+        self,
+        id: uuid.UUID,
+        id_vivienda: uuid.UUID,
+        nombre_dispositivo: str,
+        tipo_dispositivo: str,
+        estado: bool,
+        **kwargs,
+    ):
+        self._id = id
+        self._id_vivienda = id_vivienda
+        self._nombre_dispositivo = nombre_dispositivo
+        self._tipo_dispositivo = tipo_dispositivo
+        self._estado = estado
+        self._rutina = None
 
     @property
     def id(self):

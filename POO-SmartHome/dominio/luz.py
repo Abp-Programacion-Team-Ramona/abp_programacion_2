@@ -1,13 +1,14 @@
-import uuid
 from dispositivo import Dispositivo
 
 
 class Luz(Dispositivo):
-    def __init__(self, id_vivienda: uuid.UUID, id_rutina: uuid.UUID = None, rutina=None):
-        super().__init__(id_vivienda, id_rutina, rutina)
-        self.__modo = "apagado"
-        self.__intensidad = 1
-        self.__estado = False
+    tabla = "luces"
+    columnas = ["intensidad", "modo"]
+
+    def __init__(self, modo, intensidad, estado, **kwargs):
+        super().__init__(**kwargs)
+        self._modo = modo
+        self._intensidad = intensidad
 
     def is_encendida(self):
         return self.__estado

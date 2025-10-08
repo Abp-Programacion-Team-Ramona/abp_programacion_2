@@ -3,8 +3,17 @@ from datetime import time
 
 
 class Rutina:
-    def __init__(self, horario_inicio: time, horario_apagado: time, horario_encendido: time, estado_rutina: bool):
-        self.__id = uuid.uuid4()
+    def __init__(
+        self,
+        id: uuid,
+        id_dispositivo: uuid,
+        horario_inicio: time,
+        horario_apagado: time,
+        horario_encendido: time,
+        estado_rutina: bool,
+    ):
+        self.__id = id
+        self.__id_dispositivo = id_dispositivo
         self.__horario_inicio = horario_inicio
         self.__horario_apagado = horario_apagado
         self.__horario_encendido = horario_encendido
