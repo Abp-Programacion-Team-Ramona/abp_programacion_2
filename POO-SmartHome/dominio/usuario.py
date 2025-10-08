@@ -5,12 +5,12 @@ from usuario_error import UsuarioError
 class Usuario:
     ROLES_VALIDOS = ["admin", "usuario", "invitado"]
 
-    def __init__(self, correo: str, nombre: str, contraseña: str, rol: str = "usuario"):
+    def __init__(self, correo: str, nombre: str, contraseña: str, rol: str):
         self.__id = uuid.uuid4()
         self.__correo = correo
         self.__nombre = nombre
-        self.set_contraseña(contraseña)
-        self.set_rol(rol)
+        self.__contraseña = contraseña
+        self.__rol = rol
         self.__viviendas = []
 
     # -------- getters ----------
