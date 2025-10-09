@@ -16,38 +16,61 @@ class AireAcondicionado(Dispositivo):
         super().__init__(**kwargs)
         self._temperatura = temperatura
         self._velocidad = velocidad
-        if str.lower(modo) not in self.modos_validos:
-            raise ValueError(f"Modo inválido: {str.lower(modo)}")
-        self.__modo = modo
+        self._modo = modo
 
     def get_temperatura(self):
-        return self.__temperatura
+        return self._temperatura
 
     def get_velocidad(self):
-        return self.__velocidad
+        return self._velocidad
 
     def get_modo(self):
-        return self.__modo
+        return self._modo
 
     def is_encendido(self):
-        return self.__estado
+        return self._estado
 
     def encender(self):
-        if not self.__estado:
-            self.__estado = True
+        if not self._estado:
+            self._estado = True
+        else:
+            print("El dispositivo ya esta encendido")
 
     def apagar(self):
-        if self.__estado:
-            self.__estado = False
-
-    def setTemperatura(self, temperatura: int):
-        if 16 <= temperatura <= 30:
-            self.__temperatura = temperatura
+        if self._estado:
+            self._estado = False
         else:
-            raise ValueError("La temperatura debe estar entre 16 y 30 grados")
+            print("El dispositivo ya esta apagado")
 
-    def setVelocidad(self, velocidad: int):
-        if velocidad in (1, 2, 3):
-            self.__velocidad = velocidad
-        else:
-            raise ValueError("La velocidad debe ser 1 (baja), 2 (media) o 3 (alta)")
+    def cambiar_modo(self):
+        success = False
+        while not success:
+            print("Indique el nuevo modo: Frio, Calor, Auto, Ventilador")
+            modo = str.lower(input())
+            if modo not in self.modos_validos:
+                print(f"El modo: {modo} es invalido")
+            else:
+                self._modo = modo
+                success = True
+
+    def cambiar_temperatura(self):
+        success = False
+        while not success:
+            print("Indique una temperatura entre 16 y 30 grados")
+            temperatura = int(input())
+            if 16 <= temperatura <= 30:
+                self._temperatura = temperatura
+                success = True
+            else:
+                print("La temperatura debe estar entre 16 y 30 grados")
+
+    def cambiar_velocidad(self):
+        success = False
+        while not success:
+            print("Indique una velocidad entre 1 y 3")
+            velocidad = int(input())
+            if velocidad in (1, 2, 3):
+                self._velocidad = velocidad
+                success = True
+            else:
+                print("La velocidad debe ser 1 (baja), 2 (media) o 3 (alta)")
