@@ -1,5 +1,6 @@
 import uuid
 
+
 class Rutina:
     def __init__(
         self,
@@ -50,6 +51,10 @@ class Rutina:
     @property
     def estado_rutina(self):
         return self.__estado_rutina
+
+    @estado_rutina.setter
+    def estado_rutina(self, nuevo_horario: str):
+        self.__horario_encendido = nuevo_horario
 
     def cambiar_estado_rutina(self, nuevo_estado: bool) -> str:
         if self.__estado_rutina == nuevo_estado:
