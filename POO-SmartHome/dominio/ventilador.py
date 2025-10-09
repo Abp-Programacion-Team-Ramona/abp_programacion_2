@@ -7,7 +7,7 @@ class Ventilador(Dispositivo):
 
     def __init__(self, velocidad: int, giro: bool, **kwargs):
         super().__init__(**kwargs)
-        self._velocidad = velocidad
+        self._velocidad = velocidad 
         self._giro = giro
 
     @property
@@ -23,24 +23,81 @@ class Ventilador(Dispositivo):
         return self._giro
 
     def encender(self):
-        print("Se encendio el ventilador")
-
-    def apagar(self):
-        print("Se apago el ventilador")
-
-    def ajustar_velocidad(self, nueva_velocidad):
-        if 0 <= nueva_velocidad <= 3:
-            self.__velocidad = nueva_velocidad
-            print(f"Velocidad ajustada a {nueva_velocidad}")
-        else:
-            print("Valor de velocidad no válido (debe ser entre 0 y 3)")
-
-    def ajustar_giro(self, nuevo_giro):
-        if nuevo_giro in [True, False]:
-            self.__giro = nuevo_giro
-            if nuevo_giro:
-                print("Giro activado")
+        success = False
+        while not success:
+            print("¿Desea encender el ventilador? (si/no)")
+            respuesta = input().lower()
+            if respuesta in ("si", "sí"):
+                if not self._encendido:
+                    self._encendido = True
+                    print("Se encendió el ventilador")
+                else:
+                    print("El ventilador ya estaba encendido")
+                success = True
+                return True
+            elif respuesta == "no":
+                print("El ventilador permanecerá apagado")
+                success = True
+                return False
             else:
+                print("Respuesta inválida. Escriba 'si' o 'no'")
+                
+    def apagar(self):
+        success = False
+        while not success:
+            print("¿Desea apagar el ventilador? (si/no)")
+            respuesta = input().lower()
+            if respuesta in ("si", "sí"):
+                if self._encendido:
+                    self._encendido = False
+                    print("Se apagó el ventilador")
+                else:
+                    print("El ventilador ya estaba apagado")
+                success = True
+                return True
+            elif respuesta == "no":
+                print("El ventilador permanecerá encendido")
+                success = True
+                return False
+            else:
+                print("Respuesta inválida. Escriba 'si' o 'no'")
+
+    def ajustar_velocidad(self):
+        if not self._encendido:
+            print("No se puede ajustar la velocidad si el ventilador está apagado")
+            return
+        success = False
+        while not success:
+            print("Indique una velocidad entre 1 y 3")
+            nueva_velocidad = input()
+
+            if not nueva_velocidad.isdigit():
+                print("Debe ingresar un número válido (1, 2 o 3)")
+            else:
+                nueva_velocidad = int(nueva_velocidad)
+                if 1 <= nueva_velocidad <= 3:
+                    self._velocidad = nueva_velocidad
+                    print(f"Velocidad ajustada a {nueva_velocidad}")
+                    success = True
+                else:
+                    print("La velocidad debe estar entre 1 y 3")
+
+    def ajustar_giro(self):
+        if not self._encendido:
+            print("No se puede ajustar el giro si el ventilador está apagado")
+            return
+        success = False
+        while not success:
+            print("¿Desea activar el giro? (si/no)")
+            respuesta = input().lower()
+            if respuesta in ("si", "sí"):
+                self._giro = True
+                print("Giro activado")
+                success = True
+            elif respuesta == "no":
+                self._giro = False
                 print("Giro desactivado")
-        else:
-            print("Valor inválido: giro debe ser True o False")
+                success = True
+            else:
+                print("Respuesta inválida. Escriba 'si' o 'no'")
+                
