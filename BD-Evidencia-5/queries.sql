@@ -22,9 +22,10 @@ CREATE TABLE viviendas (
 CREATE TABLE rutinas (
     id CHAR(36) PRIMARY KEY,
     id_dispositivo CHAR(36) UNIQUE NOT NULL,
-    horario_inicio DATETIME NOT NULL,
-    horario_apagado DATETIME NOT NULL,
-    horario_encendido DATETIME NOT NULL,
+    descripcion VARCHAR (255) NOT NULL,
+    horario_inicio CHAR(36) NOT NULL,
+    horario_apagado CHAR(36) NOT NULL,
+    horario_encendido CHAR(36) NOT NULL,
     estado_rutina BOOLEAN NOT NULL,
     FOREIGN KEY (id_dispositivo) REFERENCES dispositivos(id) ON DELETE CASCADE
 );

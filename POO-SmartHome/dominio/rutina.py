@@ -1,19 +1,19 @@
 import uuid
-from datetime import time
-
 
 class Rutina:
     def __init__(
         self,
         id: uuid,
         id_dispositivo: uuid,
-        horario_inicio: time,
-        horario_apagado: time,
-        horario_encendido: time,
+        descripcion: str,
+        horario_inicio: str,
+        horario_apagado: str,
+        horario_encendido: str,
         estado_rutina: bool,
     ):
         self.__id = id
         self.__id_dispositivo = id_dispositivo
+        self.__descripcion = descripcion
         self.__horario_inicio = horario_inicio
         self.__horario_apagado = horario_apagado
         self.__horario_encendido = horario_encendido
@@ -28,7 +28,7 @@ class Rutina:
         return self.__horario_inicio
 
     @horario_inicio.setter
-    def horario_inicio(self, nuevo_horario: time):
+    def horario_inicio(self, nuevo_horario: str):
         self.__horario_inicio = nuevo_horario
 
     @property
@@ -36,7 +36,7 @@ class Rutina:
         return self.__horario_apagado
 
     @horario_apagado.setter
-    def horario_apagado(self, nuevo_horario: time):
+    def horario_apagado(self, nuevo_horario: str):
         self.__horario_apagado = nuevo_horario
 
     @property
@@ -44,16 +44,12 @@ class Rutina:
         return self.__horario_encendido
 
     @horario_encendido.setter
-    def horario_encendido(self, nuevo_horario: time):
+    def horario_encendido(self, nuevo_horario: str):
         self.__horario_encendido = nuevo_horario
 
     @property
     def estado_rutina(self):
         return self.__estado_rutina
-
-    @estado_rutina.setter
-    def estado_rutina(self, nuevo_estado: bool):
-        self.__estado_rutina = nuevo_estado
 
     def cambiar_estado_rutina(self, nuevo_estado: bool) -> str:
         if self.__estado_rutina == nuevo_estado:
