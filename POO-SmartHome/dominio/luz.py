@@ -1,33 +1,15 @@
-import logging
 from dispositivo import Dispositivo
-
-logger = logging.getLogger(__name__)
 
 class Luz(Dispositivo):
     tabla = "luces"
     columnas = ["intensidad", "modo"]
-    MODOS_VALIDOS = ("fiesta", "diurna", "nocturna")
+    MODOS_VALIDOS = ("normal", "fiesta", "diurna", "nocturna")
+    INTENSIDADES_VALIDAS = (1, 2, 3)
 
-    def __init__(
-        self,
-        modo,
-        intensidad,
-        estado=False,
-        modos_validos=None,
-        intensidades_validas=(1, 2, 3),
-        **kwargs
-    ):
+    def __init__(self, modo=None, intensidad=None, **kwargs):
         super().__init__(**kwargs)
-        self._estado = bool(estado)
-        self._modos_validos = tuple(modos_validos) if modos_validos else self.MODOS_VALIDOS
-        self._intensidades_validas = tuple(intensidades_validas)
-        self._modo = None
-        self._intensidad = None
-        self.configurar_modo(modo)
-        self.configurar_intensidad(intensidad)
-
-    def is_encendida(self):
-        return self._estado
+        self._modo = "normal" if modo is None else modo
+        self._intensidad = self.INTENSIDADES_VALIDAS[0] if intensidad is None else intensidad
 
     def get_modo(self):
         return self._modo
@@ -35,28 +17,39 @@ class Luz(Dispositivo):
     def get_intensidad(self):
         return self._intensidad
 
-    def encender(self):
-        if not self._estado:
-            self._estado = True
+    def configurar_modo(self, modo):
+        m = str(modo).lower() if modo is not None else ""
+        if m in self.MODOS_VALIDOS:
+            self._modo = m
         else:
-            logger.info("La luz ya está encendida")
+            print(f"Modo inválido: {modo}. Válidos: {self.MODOS_VALIDOS}")
 
-    def apagar(self):
-        if self._estado:
-            self._estado = False
-        else:
-            logger.info("La luz ya está apagada")
-
-    def configurar_modo(self, modo: str):
-        if isinstance(modo, str) and modo.lower() in self._modos_validos:
-            self._modo = modo.lower()
-        else:
-            logger.warning(f"Modo inválido: {modo}. Válidos: {self._modos_validos}")
-
-    def configurar_intensidad(self, intensidad: int):
-        if isinstance(intensidad, int) and intensidad in self._intensidades_validas:
+    def configurar_intensidad(self, intensidad):
+        if intensidad in self.INTENSIDADES_VALIDAS:
             self._intensidad = intensidad
         else:
-            logger.warning(
-                f"Intensidad inválida: {intensidad}. Válidas: {self._intensidades_validas}"
-            )
+            print(f"Intensidad inválida: {intensidad}. Válidas: {self.INTENSIDADES_VALIDAS}")
+
+    def encender(self):
+        try:
+            super().encender()
+        except AttributeError:
+            if hasattr(self, "_estado"):
+                if not self._estado:
+                    self._estado = True
+                else:
+                    print("La luz ya está encendida")
+            else:
+                print("Encender no disponible")
+
+    def apagar(self):
+        try:
+            super().apagar()
+        except AttributeError:
+            if hasattr(self, "_estado"):
+                if self._estado:
+                    self._estado = False
+                else:
+                    print("La luz ya está apagada")
+            else:
+                print("Apagar no disponible")
