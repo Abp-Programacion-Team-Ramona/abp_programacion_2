@@ -1,17 +1,18 @@
 import uuid
 
+
 class Vivienda:
     def __init__(
         self,
+        id: uuid.UUID,
         nombre: str,
         id_usuario: str,
         calle: str,
         altura: str,
-        piso=None,
+        piso: str = None,
         nota: str = None,
-        id: uuid.UUID = None
     ):
-        self.__id = id or uuid.uuid4()
+        self.__id = id
         self.__id_usuario = id_usuario
         self.__nombre = nombre
         self.__calle = calle
@@ -75,7 +76,6 @@ class Vivienda:
     def dispositivos(self):
         return self.__dispositivos
 
-
     def agregar_dispositivo(self, dispositivo=None):
         if dispositivo is not None:
             if dispositivo and dispositivo not in self.__dispositivos:
@@ -115,15 +115,19 @@ class Vivienda:
 
                 if dispositivo in self.__dispositivos:
                     self.__dispositivos.remove(dispositivo)
-                    print(f"Dispositivo '{dispositivo}' eliminado de la vivienda {self.__nombre}")
+                    print(
+                        f"Dispositivo '{dispositivo}' eliminado de la vivienda {self.__nombre}"
+                    )
                     success = True
                 else:
-                    print(f"No se encontró el dispositivo '{dispositivo}' en {self.__nombre}")
+                    print(
+                        f"No se encontró el dispositivo '{dispositivo}' en {self.__nombre}"
+                    )
 
     def mostrar_dispositivos(self):
         if not self.__dispositivos:
             print(f"{self.__nombre} no tiene dispositivos registrados")
-            return False  
+            return False
         else:
             print(f"Dispositivos en {self.__nombre}:")
             for disp in self.__dispositivos:
