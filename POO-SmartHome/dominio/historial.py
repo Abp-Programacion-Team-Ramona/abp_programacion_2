@@ -1,9 +1,8 @@
 import uuid
 
-
 class Historial:
-    def __init__(self, id_dispositivo, fecha, descripcion):
-        self.__id = uuid.uuid4()
+    def _init_(self, id, id_dispositivo, fecha, descripcion):
+        self.__id = id
         self.__id_dispositivo = id_dispositivo
         self.__fecha = fecha
         self.__descripcion = descripcion
@@ -18,8 +17,9 @@ class Historial:
 
     @property
     def fecha(self):
-        return self.fecha
+        return self.__fecha
 
     @property
     def descripcion(self):
-        return self.descripcion
+        return self.__descripcion
+        
