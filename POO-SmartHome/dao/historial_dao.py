@@ -5,7 +5,7 @@ from dominio.historial import Historial
 
 
 class HistorialDAO(i_historial_dao):
-    def _init_(self, db_conn: DatabaseConnection):
+    def __init__(self, db_conn: DatabaseConnection):
         self.db_conn = db_conn.connect_to_mysql()
 
     def get_historial(self, id: uuid.UUID) -> Historial:
