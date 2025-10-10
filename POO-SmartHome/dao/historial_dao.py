@@ -38,7 +38,6 @@ class HistorialDAO(i_historial_dao):
                 query,
                 (
                     str(historial.id),
-                    historial.correo,
                     historial.id_dispositivo,
                     historial.fecha,
                     historial.descripcion,

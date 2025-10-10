@@ -88,6 +88,3 @@ class UsuarioDAO(i_usuario_dao):
             print(f"Error al eliminar usuario: {e}")
             conn.rollback()
             return False
-
-    def row_to_obj(self, row):
-        return Usuario(correo=row[1], nombre=row[2], contraseña=row[3], rol=row[4])
