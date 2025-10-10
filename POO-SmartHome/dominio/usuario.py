@@ -72,15 +72,27 @@ class Usuario:
             else:
                 print("El nombre no puede estar vacío")
 
-    def agregar_vivienda(self, vivienda):
-        if vivienda in self.__viviendas:
-            raise ValueError(f"{self.__nombre} ya posee esta vivienda.")
-        self.__viviendas.append(vivienda)
+    def agregar_vivienda(self):
+        success = False
+        while not success:
+            print("Indique el ID de la vivienda a agregar")
+            vivienda_id = input()
+            if vivienda_id in self.__viviendas:
+                print(f"{self.__nombre} ya posee esta vivienda.")
+            else:
+                self.__viviendas.append(vivienda_id)
+                success = True
 
-    def quitar_vivienda(self, vivienda):
-        if vivienda not in self.__viviendas:
-            raise ValueError(f"{self.__nombre} no posee esta vivienda.")
-        self.__viviendas.remove(vivienda)
+    def quitar_vivienda(self):
+        success = False
+        while not success:
+            print("Indique el ID de la vivienda a quitar")
+            vivienda_id = input()
+            if vivienda_id not in self.__viviendas:
+                print(f"{self.__nombre} no posee esta vivienda.")
+            else:
+                self.__viviendas.remove(vivienda_id)
+                success = True
 
     def __str__(self):
         return f"Usuario({self.__nombre}, {self.__correo}, rol={self.__rol})"

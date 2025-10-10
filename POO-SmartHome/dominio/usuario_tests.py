@@ -74,25 +74,37 @@ class TestUsuario(unittest.TestCase):
         self.assertEqual(self.usuario.nombre, "Carlos")
         self.assertEqual(mock_input.call_count, 3)
 
-    def test_agregar_vivienda_valida(self):
-        vivienda_id = uuid.uuid4()
-        self.usuario.agregar_vivienda(vivienda_id)
+    @patch('builtins.input', return_value='vivienda-123')
+    @patch('builtins.print')
+    def test_agregar_vivienda_valida(self, mock_print, mock_input):
+        """Test que verifica agregar una vivienda correctamente"""
+        self.usuario.agregar_vivienda()
+        mock_input.assert_called_once()
 
-    def test_agregar_vivienda_duplicada(self):
-        vivienda_id = uuid.uuid4()
-        self.usuario.agregar_vivienda(vivienda_id)
-        with self.assertRaises(ValueError):
-            self.usuario.agregar_vivienda(vivienda_id)
+    @patch('builtins.input', side_effect=['vivienda-123', 'vivienda-123', 'vivienda-456'])
+    @patch('builtins.print')
+    def test_agregar_vivienda_duplicada_luego_valida(self, mock_print, mock_input):
+        """Test que verifica múltiples intentos al agregar vivienda duplicada"""
+        self.usuario.agregar_vivienda()  # Primera vivienda
+        self.usuario.agregar_vivienda()  # Intenta duplicada, luego agrega otra
+        self.assertEqual(mock_input.call_count, 3)
 
-    def test_quitar_vivienda_valida(self):
-        vivienda_id = uuid.uuid4()
-        self.usuario.agregar_vivienda(vivienda_id)
-        self.usuario.quitar_vivienda(vivienda_id)
+    @patch('builtins.input', side_effect=['vivienda-123', 'vivienda-123'])
+    @patch('builtins.print')
+    def test_quitar_vivienda_valida(self, mock_print, mock_input):
+        """Test que verifica quitar una vivienda correctamente"""
+        self.usuario.agregar_vivienda()  # Primero agregamos
+        self.usuario.quitar_vivienda()  # Luego quitamos
+        self.assertEqual(mock_input.call_count, 2)
 
-    def test_quitar_vivienda_inexistente(self):
-        vivienda_id = uuid.uuid4()
-        with self.assertRaises(ValueError):
-            self.usuario.quitar_vivienda(vivienda_id)
+    @patch('builtins.input', side_effect=['vivienda-123', 'vivienda-999', 'vivienda-123'])
+    @patch('builtins.print')
+    def test_quitar_vivienda_inexistente_luego_valida(self, mock_print, mock_input):
+        """Test que verifica múltiples intentos al quitar vivienda inexistente"""
+        self.usuario.agregar_vivienda()  # Agregamos vivienda-123 (usa primer input)
+        self.usuario.quitar_vivienda()  # Intenta quitar 999 (falla), luego 123 (éxito)
+        self.assertEqual(mock_input.call_count, 3)
+
 
 if __name__ == "__main__":
     unittest.main()
