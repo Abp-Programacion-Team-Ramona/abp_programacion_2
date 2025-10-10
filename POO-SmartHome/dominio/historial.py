@@ -1,7 +1,7 @@
 import uuid
 
 class Historial:
-    def _init_(self, id, id_dispositivo, fecha, descripcion):
+    def __init__(self, id, id_dispositivo, fecha, descripcion):
         self.__id = id
         self.__id_dispositivo = id_dispositivo
         self.__fecha = fecha
