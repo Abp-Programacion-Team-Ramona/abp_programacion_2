@@ -25,6 +25,22 @@ class Rutina:
         return self.__id
 
     @property
+    def id_dispositivo(self):
+        return self.__id_dispositivo
+
+    @id_dispositivo.setter
+    def id_dispositivo(self, nuevo_id: uuid):
+        self.__id_dispositivo = nuevo_id
+
+    @property
+    def descripcion(self):
+        return self.__descripcion
+
+    @descripcion.setter
+    def descripcion(self, nueva_descripcion: str):
+        self.__descripcion = nueva_descripcion
+
+    @property
     def horario_inicio(self):
         return self.__horario_inicio
 
@@ -53,8 +69,8 @@ class Rutina:
         return self.__estado_rutina
 
     @estado_rutina.setter
-    def estado_rutina(self, nuevo_horario: str):
-        self.__horario_encendido = nuevo_horario
+    def estado_rutina(self, nuevo_estado: bool):
+        self.__estado_rutina = nuevo_estado
 
     def cambiar_estado_rutina(self, nuevo_estado: bool) -> str:
         if self.__estado_rutina == nuevo_estado:
