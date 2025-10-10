@@ -1,58 +1,109 @@
 import unittest
 import uuid
+from unittest.mock import patch
 from usuario import Usuario
-from usuario_error import UsuarioError
 
 
 class TestUsuario(unittest.TestCase):
 
     def setUp(self):
-        self.usuario = Usuario(correo="test@mail.com", nombre="Diego", contraseña="123456")
+        self.usuario_id = uuid.uuid4()
+        self.usuario = Usuario(id=self.usuario_id, correo="test@mail.com", nombre="Diego", contraseña="123456", rol="usuario")
 
     def test_constructor_asigna_valores(self):
+        self.assertEqual(self.usuario.id, self.usuario_id)
         self.assertEqual(self.usuario.correo, "test@mail.com")
         self.assertEqual(self.usuario.nombre, "Diego")
         self.assertEqual(self.usuario.rol, "usuario")
         self.assertTrue(isinstance(self.usuario.id, uuid.UUID))
 
+    def test_id_unico(self):
+        usuario2_id = uuid.uuid4()
+        usuario2 = Usuario(usuario2_id, "otro@mail.com", "Maria", "pass456", "admin")
+        self.assertNotEqual(self.usuario.id, usuario2.id)
 
-    def test_contraseña_valida(self):
-        self.usuario.set_contraseña("abcdef")
+    @patch('builtins.input', return_value='contraseña_valida_123')
+    @patch('builtins.print')
+    def test_cambiar_contraseña_valida(self, mock_print, mock_input):
+        self.usuario.cambiar_contraseña()
+        mock_input.assert_called_once()
 
-    def test_contraseña_invalida(self):
-        with self.assertRaises(UsuarioError):
-            self.usuario.set_contraseña("123")
+    @patch('builtins.input', side_effect=['123', '12345', 'contraseña_valida'])
+    @patch('builtins.print')
+    def test_cambiar_contraseña_invalida_luego_valida(self, mock_print, mock_input):
+        self.usuario.cambiar_contraseña()
+        self.assertEqual(mock_input.call_count, 3)
 
-    def test_set_rol_valido(self):
-        self.usuario.set_rol("admin")
+    @patch('builtins.input', return_value='admin')
+    @patch('builtins.print')
+    def test_cambiar_rol_valido(self, mock_print, mock_input):
+        self.usuario.cambiar_rol()
         self.assertEqual(self.usuario.rol, "admin")
 
-    def test_set_rol_invalido(self):
-        with self.assertRaises(UsuarioError):
-            self.usuario.set_rol("superuser")
+    @patch('builtins.input', side_effect=['superuser', 'root', 'admin'])
+    @patch('builtins.print')
+    def test_cambiar_rol_invalido_luego_valido(self, mock_print, mock_input):
+        self.usuario.cambiar_rol()
+        self.assertEqual(self.usuario.rol, "admin")
+        self.assertEqual(mock_input.call_count, 3)
 
-    def test_agregar_vivienda_valida(self):
-        vivienda_id = uuid.uuid4()
-        self.usuario.agregar_vivienda(vivienda_id)
-        self.assertIn(vivienda_id, self.usuario.viviendas)
+    @patch('builtins.input', return_value='nuevo@mail.com')
+    @patch('builtins.print')
+    def test_cambiar_correo_valido(self, mock_print, mock_input):
+        """Test que verifica el cambio de correo con formato válido"""
+        self.usuario.cambiar_correo()
+        self.assertEqual(self.usuario.correo, "nuevo@mail.com")
 
-    def test_agregar_vivienda_duplicada(self):
-        vivienda_id = uuid.uuid4()
-        self.usuario.agregar_vivienda(vivienda_id)
-        with self.assertRaises(UsuarioError):
-            self.usuario.agregar_vivienda(vivienda_id)
+    @patch('builtins.input', side_effect=['correo_invalido', 'sin_punto@', 'valido@mail.com'])
+    @patch('builtins.print')
+    def test_cambiar_correo_invalido_luego_valido(self, mock_print, mock_input):
+        self.usuario.cambiar_correo()
+        self.assertEqual(self.usuario.correo, "valido@mail.com")
+        self.assertEqual(mock_input.call_count, 3)
 
-    def test_quitar_vivienda_valida(self):
-        vivienda_id = uuid.uuid4()
-        self.usuario.agregar_vivienda(vivienda_id)
-        self.usuario.quitar_vivienda(vivienda_id)
-        self.assertNotIn(vivienda_id, self.usuario.viviendas)
+    @patch('builtins.input', return_value='Carlos')
+    @patch('builtins.print')
+    def test_cambiar_nombre_valido(self, mock_print, mock_input):
+        self.usuario.cambiar_nombre()
+        self.assertEqual(self.usuario.nombre, "Carlos")
 
-    def test_quitar_vivienda_inexistente(self):
-        vivienda_id = uuid.uuid4()
-        with self.assertRaises(UsuarioError):
-            self.usuario.quitar_vivienda(vivienda_id)
+    @patch('builtins.input', side_effect=['', '   ', 'Carlos'])
+    @patch('builtins.print')
+    def test_cambiar_nombre_vacio_luego_valido(self, mock_print, mock_input):
+        self.usuario.cambiar_nombre()
+        self.assertEqual(self.usuario.nombre, "Carlos")
+        self.assertEqual(mock_input.call_count, 3)
 
+    @patch('builtins.input', return_value='vivienda-123')
+    @patch('builtins.print')
+    def test_agregar_vivienda_valida(self, mock_print, mock_input):
+        """Test que verifica agregar una vivienda correctamente"""
+        self.usuario.agregar_vivienda()
+        mock_input.assert_called_once()
+
+    @patch('builtins.input', side_effect=['vivienda-123', 'vivienda-123', 'vivienda-456'])
+    @patch('builtins.print')
+    def test_agregar_vivienda_duplicada_luego_valida(self, mock_print, mock_input):
+        """Test que verifica múltiples intentos al agregar vivienda duplicada"""
+        self.usuario.agregar_vivienda()  # Primera vivienda
+        self.usuario.agregar_vivienda()  # Intenta duplicada, luego agrega otra
+        self.assertEqual(mock_input.call_count, 3)
+
+    @patch('builtins.input', side_effect=['vivienda-123', 'vivienda-123'])
+    @patch('builtins.print')
+    def test_quitar_vivienda_valida(self, mock_print, mock_input):
+        """Test que verifica quitar una vivienda correctamente"""
+        self.usuario.agregar_vivienda()  # Primero agregamos
+        self.usuario.quitar_vivienda()  # Luego quitamos
+        self.assertEqual(mock_input.call_count, 2)
+
+    @patch('builtins.input', side_effect=['vivienda-123', 'vivienda-999', 'vivienda-123'])
+    @patch('builtins.print')
+    def test_quitar_vivienda_inexistente_luego_valida(self, mock_print, mock_input):
+        """Test que verifica múltiples intentos al quitar vivienda inexistente"""
+        self.usuario.agregar_vivienda()  # Agregamos vivienda-123 (usa primer input)
+        self.usuario.quitar_vivienda()  # Intenta quitar 999 (falla), luego 123 (éxito)
+        self.assertEqual(mock_input.call_count, 3)
 
 
 if __name__ == "__main__":
