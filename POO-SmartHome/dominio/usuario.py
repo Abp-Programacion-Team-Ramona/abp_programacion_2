@@ -2,13 +2,15 @@ import uuid
 
 
 class Usuario:
-    ROLES_VALIDOS = ["admin", "usuario", "invitado"]
+    ROLES_VALIDOS = ["admin", "usuario"]
 
-    def __init__(self, id: uuid.UUID, correo: str, nombre: str, contraseña: str, rol: str):
+    def __init__(
+        self, id: uuid.UUID, correo: str, nombre: str, contrasena: str, rol: str
+    ):
         self.__id = id
         self.__correo = correo
         self.__nombre = nombre
-        self.__contraseña = contraseña
+        self.__contrasena = contrasena
         self.__rol = rol
         self.__viviendas = []
 
@@ -28,13 +30,24 @@ class Usuario:
     def rol(self):
         return self.__rol
 
-    def cambiar_contraseña(self):
+    @property
+    def contrasena(self):
+        return self.__contrasena
+
+    @property
+    def viviendas(self):
+        return self.__viviendas
+
+    def mostrar_datos(self):
+        print(f"Nombre:{self.nombre},Correo: {self.correo},Viviendas:{self.viviendas}")
+
+    def cambiar_contrasena(self):
         success = False
         while not success:
             print("Indique la nueva contraseña (mínimo 6 caracteres)")
-            contraseña = input()
-            if len(contraseña) >= 6:
-                self.__contraseña = contraseña
+            contrasena = input()
+            if len(contrasena) >= 6:
+                self.__contrasena = contrasena
                 success = True
             else:
                 print("La contraseña debe tener al menos 6 caracteres")
@@ -48,7 +61,9 @@ class Usuario:
                 self.__rol = rol
                 success = True
             else:
-                print(f"El rol '{rol}' es inválido. Roles válidos: {', '.join(self.ROLES_VALIDOS)}")
+                print(
+                    f"El rol '{rol}' es inválido. Roles válidos: {', '.join(self.ROLES_VALIDOS)}"
+                )
 
     def cambiar_correo(self):
         success = False
@@ -93,6 +108,3 @@ class Usuario:
             else:
                 self.__viviendas.remove(vivienda_id)
                 success = True
-
-    def __str__(self):
-        return f"Usuario({self.__nombre}, {self.__correo}, rol={self.__rol})"

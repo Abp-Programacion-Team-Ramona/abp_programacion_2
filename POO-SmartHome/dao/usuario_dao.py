@@ -8,18 +8,21 @@ class UsuarioDAO(i_usuario_dao):
     def __init__(self, db_conn: DatabaseConnection):
         self.db_conn = db_conn.connect_to_mysql()
 
-    def get_usuario(self, id: uuid.UUID) -> Usuario:
+    def get_usuario(self, user: str, contrasena: str) -> Usuario:
         conn = self.db_conn
         cursor = conn.cursor()
         query = """
-        SELECT id, correo, nombre, contraseña, rol
+        SELECT id, correo, nombre, contrasena, rol
         FROM usuarios
-        WHERE id = %s
+        WHERE nombre = %s
+        and contrasena = %s
         """
-        cursor.execute(query, (str(id),))
+        cursor.execute(query, (user, contrasena))
         row = cursor.fetchone()
         if row:
-            return Usuario(correo=row[1], nombre=row[2], contraseña=row[3], rol=row[4])
+            return Usuario(
+                id=row[0], correo=row[1], nombre=row[2], contrasena=row[3], rol=row[4]
+            )
         return None
 
     def create_usuario(self, usuario: Usuario) -> bool:
@@ -36,7 +39,7 @@ class UsuarioDAO(i_usuario_dao):
                     str(usuario.id),
                     usuario.correo,
                     usuario.nombre,
-                    usuario.contraseña,
+                    usuario.contrasena,
                     usuario.rol,
                 ),
             )
@@ -64,12 +67,36 @@ class UsuarioDAO(i_usuario_dao):
                 (
                     usuario.correo,
                     usuario.nombre,
-                    usuario.contraseña,
+                    usuario.contrasena,
                     usuario.rol,
                     str(usuario.id),
                 ),
             )
             conn.commit()
+            return cursor.rowcount > 0
+        except Exception as e:
+            print(f"Error al actualizar usuario: {e}")
+            conn.rollback()
+            return False
+
+    def update_usuario_rol(self, correo: str, rol: str) -> bool:
+        conn = self.db_conn
+        cursor = conn.cursor()
+        query = """
+        UPDATE usuarios
+        SET   rol = %s
+        WHERE correo = %s
+        """
+        try:
+            cursor.execute(
+                query,
+                (
+                    rol,
+                    correo,
+                ),
+            )
+            conn.commit()
+            print(f"Actualizado el rol del usuario a {rol}")
             return cursor.rowcount > 0
         except Exception as e:
             print(f"Error al actualizar usuario: {e}")

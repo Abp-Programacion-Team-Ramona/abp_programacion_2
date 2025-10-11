@@ -8,8 +8,8 @@ class Dispositivo(ABC):
 
     def __init__(
         self,
-        id: uuid.UUID,
-        id_vivienda: uuid.UUID,
+        id: uuid,
+        id_vivienda: uuid,
         nombre_dispositivo: str,
         tipo_dispositivo: str,
         estado: bool,
@@ -29,6 +29,10 @@ class Dispositivo(ABC):
     @property
     def nombre_dispositivo(self):
         return self.__nombre_dispositivo
+
+    @property
+    def tipo_dispositivo(self):
+        return self.tipo_dispositivo
 
     @property
     def id_vivienda(self):
