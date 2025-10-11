@@ -50,21 +50,21 @@ CREATE TABLE aires_acondicionados (
     temperatura INT,
     velocidad INT,
     modo VARCHAR(50),
-    FOREIGN KEY (id) REFERENCES dispositivos(id)
+    FOREIGN KEY (id) REFERENCES dispositivos(id) ON DELETE CASCADE
 );
 
 CREATE TABLE luces (
     id CHAR(36) PRIMARY KEY,
     modo VARCHAR(50),
     intensidad INT,
-    FOREIGN KEY (id) REFERENCES dispositivos(id)
+    FOREIGN KEY (id) REFERENCES dispositivos(id) ON DELETE CASCADE
 );
 
 CREATE TABLE ventiladores (
     id CHAR(36) PRIMARY KEY,
     velocidad int,
     giro bool,
-    FOREIGN KEY (id) REFERENCES dispositivos(id)
+    FOREIGN KEY (id) REFERENCES dispositivos(id) ON DELETE CASCADE
 );
 
 INSERT INTO usuarios (id, correo, nombre, contrasena, rol) VALUES
