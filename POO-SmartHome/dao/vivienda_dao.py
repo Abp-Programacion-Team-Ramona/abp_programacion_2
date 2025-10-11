@@ -1,14 +1,14 @@
 import uuid
-from interfaces import i_vivienda_dao
+from dao.interfaces.i_vivienda_dao import IViviendaDAO
 from conn.db_conn import DatabaseConnection
 from dominio.vivienda import Vivienda
 
 
-class ViviendaDAO(i_vivienda_dao):
+class ViviendaDAO(IViviendaDAO):
     def __init__(self, db_conn: DatabaseConnection):
         self.db_conn = db_conn.connect_to_mysql()
 
-    def get_vivienda(self, id: uuid.UUID) -> Vivienda:
+    def get(self, id: uuid.UUID) -> Vivienda:
         conn = self.db_conn
         cursor = conn.cursor()
         query = """
@@ -29,7 +29,7 @@ class ViviendaDAO(i_vivienda_dao):
             )
         return None
 
-    def create_vivienda(self, vivienda: Vivienda) -> bool:
+    def create(self, vivienda: Vivienda) -> bool:
         conn = self.db_conn
         cursor = conn.cursor()
         query = """
@@ -42,7 +42,7 @@ class ViviendaDAO(i_vivienda_dao):
                 (
                     str(vivienda.id),
                     vivienda.nombre,
-                    vivienda.id_usuario,
+                    str(vivienda.id_usuario),
                     vivienda.calle,
                     vivienda.altura,
                     vivienda.piso,
@@ -56,7 +56,7 @@ class ViviendaDAO(i_vivienda_dao):
             conn.rollback()
             return False
 
-    def update_usuario(self, vivienda: Vivienda) -> bool:
+    def update(self, vivienda: Vivienda) -> bool:
         conn = self.db_conn
         cursor = conn.cursor()
         query = """
@@ -89,7 +89,7 @@ class ViviendaDAO(i_vivienda_dao):
             conn.rollback()
             return False
 
-    def delete_usuario(self, id: uuid.UUID) -> bool:
+    def delete(self, id: uuid.UUID) -> bool:
         conn = self.db_conn
         cursor = conn.cursor()
         query = "DELETE FROM viviendas WHERE id = %s"

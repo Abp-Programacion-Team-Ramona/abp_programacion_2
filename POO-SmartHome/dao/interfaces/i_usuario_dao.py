@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 
 class IUsuarioDAO(ABC):
     @abstractmethod
-    def get(self, id: uuid):
+    def get(self, user: str, contrasena: str):
         pass
 
     @abstractmethod
@@ -16,5 +16,5 @@ class IUsuarioDAO(ABC):
         pass
 
     @abstractmethod
-    def delete(self, object):
+    def delete(self, id: uuid.UUID):
         pass

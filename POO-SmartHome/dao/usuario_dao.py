@@ -1,14 +1,15 @@
 import uuid
-from interfaces import i_usuario_dao
+from dao.interfaces.i_usuario_dao import IUsuarioDAO
 from conn.db_conn import DatabaseConnection
 from dominio.usuario import Usuario
 
 
-class UsuarioDAO(i_usuario_dao):
+class UsuarioDAO(IUsuarioDAO):
+
     def __init__(self, db_conn: DatabaseConnection):
         self.db_conn = db_conn.connect_to_mysql()
 
-    def get_usuario(self, user: str, contrasena: str) -> Usuario:
+    def get(self, user: str, contrasena: str) -> Usuario:
         conn = self.db_conn
         cursor = conn.cursor()
         query = """
@@ -25,11 +26,11 @@ class UsuarioDAO(i_usuario_dao):
             )
         return None
 
-    def create_usuario(self, usuario: Usuario) -> bool:
+    def create(self, usuario : Usuario) -> bool:
         conn = self.db_conn
         cursor = conn.cursor()
         query = """
-        INSERT INTO usuarios (id, correo, nombre, contraseña, rol)
+        INSERT INTO usuarios (id, correo, nombre, contrasena, rol)
         VALUES (%s, %s, %s, %s, %s)
         """
         try:
@@ -50,7 +51,7 @@ class UsuarioDAO(i_usuario_dao):
             conn.rollback()
             return False
 
-    def update_usuario(self, usuario: Usuario) -> bool:
+    def update(self, usuario: Usuario) -> bool:
         conn = self.db_conn
         cursor = conn.cursor()
         query = """
@@ -103,7 +104,7 @@ class UsuarioDAO(i_usuario_dao):
             conn.rollback()
             return False
 
-    def delete_usuario(self, id: uuid.UUID) -> bool:
+    def delete(self, id: uuid.UUID) -> bool:
         conn = self.db_conn
         cursor = conn.cursor()
         query = "DELETE FROM usuarios WHERE id = %s"

@@ -24,31 +24,31 @@ class Dispositivo(ABC):
 
     @property
     def id(self):
-        return self.__id
+        return self._id
 
     @property
     def nombre_dispositivo(self):
-        return self.__nombre_dispositivo
+        return self._nombre_dispositivo
 
     @property
     def tipo_dispositivo(self):
-        return self.tipo_dispositivo
+        return self._tipo_dispositivo
 
     @property
     def id_vivienda(self):
-        return self.__id_vivienda
+        return self._id_vivienda
 
     @property
     def id_rutina(self):
-        return self.__id_rutina
+        return self._id_rutina
 
     @property
     def estado(self):
-        return self.__estado
+        return self._estado
 
     @property
     def rutina(self):
-        return self.__rutina
+        return self._rutina
 
     @abstractmethod
     def encender(self):
@@ -61,8 +61,8 @@ class Dispositivo(ABC):
     def cambiar_nombre_dispositivo(self, nombre):
         if not nombre:
             raise ValueError("El nombre del dispositivo no puede estar vacío")
-        self.__nombre_dispositivo = nombre
+        self._nombre_dispositivo = nombre
 
     def asignar_rutina(self, rutina):
-        self.__rutina = rutina
-        self.__id_rutina = getattr(rutina, "id", uuid.uuid4())
+        self._rutina = rutina
+        self._id_rutina = getattr(rutina, "id", uuid.uuid4())

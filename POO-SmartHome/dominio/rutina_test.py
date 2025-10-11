@@ -40,13 +40,13 @@ class TestRutina(unittest.TestCase):
         self.rutina.estado_rutina = True
         msg = self.rutina.cambiar_estado_rutina(False)
         self.assertFalse(self.rutina.estado_rutina)
-        self.assertEqual(msg, "La rutina ya está desactivada.")
+        self.assertEqual(msg, "Rutina ahora desactivada.")
 
     def test_cambiar_estado_redundante_activa(self):
         self.rutina.estado_rutina = True
         msg = self.rutina.cambiar_estado_rutina(True)
         self.assertTrue(self.rutina.estado_rutina)
-        self.assertEqual(msg, "Rutina ahora activada.")
+        self.assertEqual(msg, "La rutina ya está activada.")
 
     def test_cambiar_estado_redundante_inactiva(self):
         self.rutina.estado_rutina = False

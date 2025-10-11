@@ -9,11 +9,10 @@ class DatabaseConnection:
             connection = mysql.connector.connect(
                 user="root",
                 password="localdb",
-                host="127.0.0.1",
-                database="local",
+                host="localhost",
+                database="abp_db",
                 port="3306",
             )
-            print("Conexion exitosa a db")
             return connection
 
         except mysql.connector.Error as err:

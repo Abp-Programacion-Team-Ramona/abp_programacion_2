@@ -1,4 +1,4 @@
-from dispositivo import Dispositivo
+from dominio.dispositivo import Dispositivo
 
 
 class Luz(Dispositivo):
@@ -14,10 +14,12 @@ class Luz(Dispositivo):
             self.INTENSIDADES_VALIDAS[0] if intensidad is None else intensidad
         )
 
-    def get_modo(self):
+    @property
+    def modo(self):
         return self._modo
 
-    def get_intensidad(self):
+    @property
+    def intensidad(self):
         return self._intensidad
 
     def configurar_modo(self, modo):

@@ -1,13 +1,13 @@
-from interfaces import i_rutina_dao
+from dao.interfaces.i_rutina_dao import IRutinaDAO
 from conn.db_conn import DatabaseConnection
 from dominio.rutina import Rutina
 
 
-class RutinaDAO(i_rutina_dao):
+class RutinaDAO(IRutinaDAO):
     def __init__(self, db_conn: DatabaseConnection):
         self.db_conn = db_conn.connect_to_mysql()
 
-    def get_rutina(self, id) -> Rutina:
+    def get(self, id) -> Rutina:
         conn = self.db_conn
         cursor = conn.cursor()
         query = """
@@ -19,7 +19,7 @@ class RutinaDAO(i_rutina_dao):
             return Rutina(row[0], row[1], row[2], row[3], row[4], row[5], row[6])
         return None
 
-    def create_rutina(self, rutina: Rutina) -> bool:
+    def create(self, rutina: Rutina) -> bool:
         conn = self.db_conn
         cursor = conn.cursor()
         query = """
@@ -30,15 +30,14 @@ class RutinaDAO(i_rutina_dao):
             cursor.execute(
                 query,
                 (
-                    str(
-                        rutina.id,
-                        rutina.id_dispositivo,
-                        rutina.descripcion,
-                        rutina.horario_inicio,
-                        rutina.horario_apagado,
-                        rutina.horario_encendido,
-                        rutina.estado_rutina,
-                    )
+                    str(rutina.id),
+                    str(rutina.id_dispositivo),
+                    rutina.descripcion,
+                    rutina.horario_inicio,
+                    rutina.horario_apagado,
+                    rutina.horario_encendido,
+                    rutina.estado_rutina,
+
                 ),
             )
             conn.commit()
@@ -48,7 +47,7 @@ class RutinaDAO(i_rutina_dao):
             conn.rollback()
             return False
 
-    def update_rutina(self, rutina: Rutina):
+    def update(self, rutina: Rutina):
         conn = self.db_conn
         cursor = conn.cursor()
         query = """
@@ -79,7 +78,7 @@ class RutinaDAO(i_rutina_dao):
             conn.rollback()
             return False
 
-    def delete_rutina(self, id):
+    def delete(self, id):
         conn = self.db_conn
         cursor = conn.cursor()
         query = "DELETE FROM rutinas WHERE id = %s"

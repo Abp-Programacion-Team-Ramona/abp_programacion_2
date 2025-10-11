@@ -39,7 +39,7 @@ class Usuario:
         return self.__viviendas
 
     def mostrar_datos(self):
-        print(f"Nombre:{self.nombre},Correo: {self.correo},Viviendas:{self.viviendas}")
+        print(f"Nombre: {self.nombre},Correo: {self.correo},Rol actual:{self.rol}")
 
     def cambiar_contrasena(self):
         success = False

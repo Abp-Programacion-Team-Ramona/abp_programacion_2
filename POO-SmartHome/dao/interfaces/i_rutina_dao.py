@@ -2,7 +2,7 @@ import uuid
 from abc import ABC, abstractmethod
 
 
-class IUsuarioDAO(ABC):
+class IRutinaDAO(ABC):
     @abstractmethod
     def get(self, id: uuid):
         pass
