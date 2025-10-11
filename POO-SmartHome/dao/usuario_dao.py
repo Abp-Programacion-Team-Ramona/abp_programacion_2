@@ -1,32 +1,36 @@
 import uuid
-from interfaces import i_usuario_dao
+from dao.interfaces.i_usuario_dao import IUsuarioDAO
 from conn.db_conn import DatabaseConnection
 from dominio.usuario import Usuario
 
 
-class UsuarioDAO(i_usuario_dao):
+class UsuarioDAO(IUsuarioDAO):
+
     def __init__(self, db_conn: DatabaseConnection):
         self.db_conn = db_conn.connect_to_mysql()
 
-    def get_usuario(self, id: uuid.UUID) -> Usuario:
+    def get(self, user: str, contrasena: str) -> Usuario:
         conn = self.db_conn
         cursor = conn.cursor()
         query = """
-        SELECT id, correo, nombre, contraseña, rol
+        SELECT id, correo, nombre, contrasena, rol
         FROM usuarios
-        WHERE id = %s
+        WHERE nombre = %s
+        and contrasena = %s
         """
-        cursor.execute(query, (str(id),))
+        cursor.execute(query, (user, contrasena))
         row = cursor.fetchone()
         if row:
-            return Usuario(correo=row[1], nombre=row[2], contraseña=row[3], rol=row[4])
+            return Usuario(
+                id=row[0], correo=row[1], nombre=row[2], contrasena=row[3], rol=row[4]
+            )
         return None
 
-    def create_usuario(self, usuario: Usuario) -> bool:
+    def create(self, usuario : Usuario) -> bool:
         conn = self.db_conn
         cursor = conn.cursor()
         query = """
-        INSERT INTO usuarios (id, correo, nombre, contraseña, rol)
+        INSERT INTO usuarios (id, correo, nombre, contrasena, rol)
         VALUES (%s, %s, %s, %s, %s)
         """
         try:
@@ -36,7 +40,7 @@ class UsuarioDAO(i_usuario_dao):
                     str(usuario.id),
                     usuario.correo,
                     usuario.nombre,
-                    usuario.contraseña,
+                    usuario.contrasena,
                     usuario.rol,
                 ),
             )
@@ -47,7 +51,7 @@ class UsuarioDAO(i_usuario_dao):
             conn.rollback()
             return False
 
-    def update_usuario(self, usuario: Usuario) -> bool:
+    def update(self, usuario: Usuario) -> bool:
         conn = self.db_conn
         cursor = conn.cursor()
         query = """
@@ -64,7 +68,7 @@ class UsuarioDAO(i_usuario_dao):
                 (
                     usuario.correo,
                     usuario.nombre,
-                    usuario.contraseña,
+                    usuario.contrasena,
                     usuario.rol,
                     str(usuario.id),
                 ),
@@ -76,7 +80,31 @@ class UsuarioDAO(i_usuario_dao):
             conn.rollback()
             return False
 
-    def delete_usuario(self, id: uuid.UUID) -> bool:
+    def update_usuario_rol(self, correo: str, rol: str) -> bool:
+        conn = self.db_conn
+        cursor = conn.cursor()
+        query = """
+        UPDATE usuarios
+        SET   rol = %s
+        WHERE correo = %s
+        """
+        try:
+            cursor.execute(
+                query,
+                (
+                    rol,
+                    correo,
+                ),
+            )
+            conn.commit()
+            print(f"Actualizado el rol del usuario a {rol}")
+            return cursor.rowcount > 0
+        except Exception as e:
+            print(f"Error al actualizar usuario: {e}")
+            conn.rollback()
+            return False
+
+    def delete(self, id: uuid.UUID) -> bool:
         conn = self.db_conn
         cursor = conn.cursor()
         query = "DELETE FROM usuarios WHERE id = %s"

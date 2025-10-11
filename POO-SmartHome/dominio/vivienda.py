@@ -6,7 +6,7 @@ class Vivienda:
         self,
         id: uuid.UUID,
         nombre: str,
-        id_usuario: str,
+        id_usuario: uuid.UUID,
         calle: str,
         altura: str,
         piso: str = None,

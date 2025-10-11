@@ -13,16 +13,16 @@ class DispositivoConcreto(Dispositivo):
 
 class TestDispositivo(unittest.TestCase):
     def setUp(self):
-        self.__id_vivienda = uuid.uuid4()
-        self.__dispositivo = DispositivoConcreto(self.__id_vivienda, "Luz Sala")
+        self._id_vivienda = uuid.uuid4()
+        self._dispositivo = DispositivoConcreto(uuid.uuid4(),uuid.uuid4(),str(self._id_vivienda),"Luz Sala",True)
 
     def test_cambiar_nombre_dispositivo_valido(self):
-        self.__dispositivo.cambiar_nombre_dispositivo("Luz Cocina")
-        self.assertEqual(self.__dispositivo.nombre_dispositivo, "Luz Cocina")
+        self._dispositivo.cambiar_nombre_dispositivo("Luz Cocina")
+        self.assertEqual(self._dispositivo.nombre_dispositivo, "Luz Cocina")
 
     def test_cambiar_nombre_dispositivo_invalido(self):
         with self.assertRaises(ValueError):
-            self.__dispositivo.cambiar_nombre_dispositivo("")
+            self._dispositivo.cambiar_nombre_dispositivo("")
 
     def test_asignar_rutina_con_id(self):
         class Rutina:
@@ -30,18 +30,18 @@ class TestDispositivo(unittest.TestCase):
                 self.id = uuid.uuid4()
 
         rutina = Rutina()
-        self.__dispositivo.asignar_rutina(rutina)
-        self.assertEqual(self.__dispositivo.rutina, rutina)
-        self.assertEqual(self.__dispositivo.id_rutina, rutina.id)
+        self._dispositivo.asignar_rutina(rutina)
+        self.assertEqual(self._dispositivo.rutina, rutina)
+        self.assertEqual(self._dispositivo.id_rutina, rutina.id)
 
     def test_asignar_rutina_sin_id(self):
         class Rutina:
             pass
 
         rutina = Rutina()
-        self.__dispositivo.asignar_rutina(rutina)
-        self.assertEqual(self.__dispositivo.rutina, rutina)
-        self.assertIsInstance(self.__dispositivo.id_rutina, uuid.UUID)
+        self._dispositivo.asignar_rutina(rutina)
+        self.assertEqual(self._dispositivo.rutina, rutina)
+        self.assertIsInstance(self._dispositivo.id_rutina, uuid.UUID)
 
 
 if __name__ == "__main__":

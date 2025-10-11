@@ -1,30 +1,57 @@
 import uuid
-from interfaces import i_dispositivo_dao
+from dao.interfaces.i_dispositivo_dao import IDispositivoDAO
 from conn.db_conn import DatabaseConnection
 from dominio.dispositivo import Dispositivo
 
 
-class DispositivoDAO(i_dispositivo_dao):
+class DispositivoDAO(IDispositivoDAO):
     def __init__(self, db_conn: DatabaseConnection):
         self.db_conn = db_conn.connect_to_mysql()
 
-    def get_dispositivo(self, id: uuid.UUID, tabla_concreta: str, cls):
+    def get(self, id: str, tabla_concreta: str, cls) -> Dispositivo:
         conn = self.db_conn
         cursor = conn.cursor()
         query = f"""
-        SELECT d.*, h.*
-        FROM dispositivos d
-        JOIN {tabla_concreta} h ON d.id = h.id
-        WHERE d.id = %s
+            SELECT d.*, h.*
+            FROM dispositivos d
+            JOIN {tabla_concreta} h ON d.id = h.id
+            WHERE d.id = %s
         """
-        cursor.execute(query, (str(id),))
+        cursor.execute(query, (id,))
         row = cursor.fetchone()
-        if row:
-            columns = [desc[0] for desc in cursor.description]
-            return self.row_to_obj(cls, row, columns)
-        return None
+        if not row:
+            cursor.close()
+            return None
 
-    def create_dispositivo(self, dispositivo: Dispositivo):
+        columns = [desc[0] for desc in cursor.description]
+        dispositivo = self.row_to_obj(cls, row, columns)
+        cursor.close()
+        return dispositivo
+
+    def get_dispositivos_x_usuario(self, id_usuario: uuid.UUID):
+        conn = self.db_conn
+        cursor = conn.cursor()
+
+        query = """
+            SELECT d.*
+            FROM dispositivos d
+            JOIN viviendas v ON d.id_vivienda = v.id
+            WHERE v.id_usuario = %s
+        """
+
+        cursor.execute(query, (str(id_usuario),))
+        rows = cursor.fetchall()
+
+        dispositivos = []
+        if rows:
+            columns = [desc[0] for desc in cursor.description]
+            for row in rows:
+                dispositivos.append(dict(zip(columns, row)))
+
+        cursor.close()
+        return dispositivos
+
+    def create(self, dispositivo: Dispositivo):
         conn = self.db_conn
         cursor = conn.cursor()
         query_dispositivos = """
@@ -51,21 +78,18 @@ class DispositivoDAO(i_dispositivo_dao):
             INSERT INTO {tabla_concreta} (id, {columnas_sql})
             VALUES (%s, {values})
             """
-        valores = [str(dispositivo.id)] + [
-            getattr(dispositivo, c) for c in columnas_extra
-        ]
+        valores = [str(dispositivo.id)] + [getattr(dispositivo, c) for c in columnas_extra]
         cursor.execute(query_concreta, valores)
 
         conn.commit()
 
-    def update_dispositivo(self, dispositivo):
+    def update(self, dispositivo: Dispositivo):
         conn = self.db_conn
         cursor = conn.cursor()
         query_dispositivos = """
             UPDATE dispositivos
             SET nombre_dispositivo = %s,
-                tipo_dispositivo = %s,
-                estado = %s
+                tipo_dispositivo = %s
             WHERE id = %s
             """
         cursor.execute(
@@ -73,7 +97,6 @@ class DispositivoDAO(i_dispositivo_dao):
             (
                 dispositivo.nombre_dispositivo,
                 dispositivo.tipo_dispositivo,
-                dispositivo.estado,
                 str(dispositivo.id),
             ),
         )
@@ -88,14 +111,12 @@ class DispositivoDAO(i_dispositivo_dao):
             WHERE id = %s
             """
 
-        valores = [getattr(dispositivo, c) for c in columnas_extra] + [
-            str(dispositivo.id)
-        ]
+        valores = [getattr(dispositivo, c) for c in columnas_extra] + [str(dispositivo.id)]
         cursor.execute(query_concreta, valores)
 
         conn.commit()
 
-    def delete_dispositivo(self, id: uuid.UUID):
+    def delete(self, id: uuid.UUID):
         conn = self.db_conn
         cursor = conn.cursor()
         query = "DELETE FROM dispositivos WHERE id = %s"

@@ -1,14 +1,14 @@
 import uuid
-from interfaces import i_historial_dao
+from dao.interfaces.i_historial_dao import IHistorialDAO
 from conn.db_conn import DatabaseConnection
 from dominio.historial import Historial
 
 
-class HistorialDAO(i_historial_dao):
+class HistorialDAO(IHistorialDAO):
     def __init__(self, db_conn: DatabaseConnection):
         self.db_conn = db_conn.connect_to_mysql()
 
-    def get_historial(self, id: uuid.UUID) -> Historial:
+    def get(self, id: uuid.UUID) -> Historial:
         conn = self.db_conn
         cursor = conn.cursor()
         query = """
@@ -26,7 +26,7 @@ class HistorialDAO(i_historial_dao):
             )
         return None
 
-    def create_historial(self, historial: Historial) -> bool:
+    def create(self, historial: Historial) -> bool:
         conn = self.db_conn
         cursor = conn.cursor()
         query = """

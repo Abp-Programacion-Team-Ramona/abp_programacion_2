@@ -5,10 +5,15 @@ from usuario import Usuario
 
 
 class TestUsuario(unittest.TestCase):
-
     def setUp(self):
         self.usuario_id = uuid.uuid4()
-        self.usuario = Usuario(id=self.usuario_id, correo="test@mail.com", nombre="Diego", contraseña="123456", rol="usuario")
+        self.usuario = Usuario(
+            id=self.usuario_id,
+            correo="test@mail.com",
+            nombre="Diego",
+            contrasena="123456",
+            rol="usuario",
+        )
 
     def test_constructor_asigna_valores(self):
         self.assertEqual(self.usuario.id, self.usuario_id)
@@ -22,83 +27,90 @@ class TestUsuario(unittest.TestCase):
         usuario2 = Usuario(usuario2_id, "otro@mail.com", "Maria", "pass456", "admin")
         self.assertNotEqual(self.usuario.id, usuario2.id)
 
-    @patch('builtins.input', return_value='contraseña_valida_123')
-    @patch('builtins.print')
+    @patch("builtins.input", return_value="contraseña_valida_123")
+    @patch("builtins.print")
     def test_cambiar_contraseña_valida(self, mock_print, mock_input):
-        self.usuario.cambiar_contraseña()
+        self.usuario.cambiar_contrasena()
         mock_input.assert_called_once()
 
-    @patch('builtins.input', side_effect=['123', '12345', 'contraseña_valida'])
-    @patch('builtins.print')
+    @patch("builtins.input", side_effect=["123", "12345", "contraseña_valida"])
+    @patch("builtins.print")
     def test_cambiar_contraseña_invalida_luego_valida(self, mock_print, mock_input):
-        self.usuario.cambiar_contraseña()
+        self.usuario.cambiar_contrasena()
         self.assertEqual(mock_input.call_count, 3)
 
-    @patch('builtins.input', return_value='admin')
-    @patch('builtins.print')
+    @patch("builtins.input", return_value="admin")
+    @patch("builtins.print")
     def test_cambiar_rol_valido(self, mock_print, mock_input):
         self.usuario.cambiar_rol()
         self.assertEqual(self.usuario.rol, "admin")
 
-    @patch('builtins.input', side_effect=['superuser', 'root', 'admin'])
-    @patch('builtins.print')
+    @patch("builtins.input", side_effect=["superuser", "root", "admin"])
+    @patch("builtins.print")
     def test_cambiar_rol_invalido_luego_valido(self, mock_print, mock_input):
         self.usuario.cambiar_rol()
         self.assertEqual(self.usuario.rol, "admin")
         self.assertEqual(mock_input.call_count, 3)
 
-    @patch('builtins.input', return_value='nuevo@mail.com')
-    @patch('builtins.print')
+    @patch("builtins.input", return_value="nuevo@mail.com")
+    @patch("builtins.print")
     def test_cambiar_correo_valido(self, mock_print, mock_input):
         """Test que verifica el cambio de correo con formato válido"""
         self.usuario.cambiar_correo()
         self.assertEqual(self.usuario.correo, "nuevo@mail.com")
 
-    @patch('builtins.input', side_effect=['correo_invalido', 'sin_punto@', 'valido@mail.com'])
-    @patch('builtins.print')
+    @patch(
+        "builtins.input",
+        side_effect=["correo_invalido", "sin_punto@", "valido@mail.com"],
+    )
+    @patch("builtins.print")
     def test_cambiar_correo_invalido_luego_valido(self, mock_print, mock_input):
         self.usuario.cambiar_correo()
         self.assertEqual(self.usuario.correo, "valido@mail.com")
         self.assertEqual(mock_input.call_count, 3)
 
-    @patch('builtins.input', return_value='Carlos')
-    @patch('builtins.print')
+    @patch("builtins.input", return_value="Carlos")
+    @patch("builtins.print")
     def test_cambiar_nombre_valido(self, mock_print, mock_input):
         self.usuario.cambiar_nombre()
         self.assertEqual(self.usuario.nombre, "Carlos")
 
-    @patch('builtins.input', side_effect=['', '   ', 'Carlos'])
-    @patch('builtins.print')
+    @patch("builtins.input", side_effect=["", "   ", "Carlos"])
+    @patch("builtins.print")
     def test_cambiar_nombre_vacio_luego_valido(self, mock_print, mock_input):
         self.usuario.cambiar_nombre()
         self.assertEqual(self.usuario.nombre, "Carlos")
         self.assertEqual(mock_input.call_count, 3)
 
-    @patch('builtins.input', return_value='vivienda-123')
-    @patch('builtins.print')
+    @patch("builtins.input", return_value="vivienda-123")
+    @patch("builtins.print")
     def test_agregar_vivienda_valida(self, mock_print, mock_input):
         """Test que verifica agregar una vivienda correctamente"""
         self.usuario.agregar_vivienda()
         mock_input.assert_called_once()
 
-    @patch('builtins.input', side_effect=['vivienda-123', 'vivienda-123', 'vivienda-456'])
-    @patch('builtins.print')
+    @patch(
+        "builtins.input", side_effect=["vivienda-123", "vivienda-123", "vivienda-456"]
+    )
+    @patch("builtins.print")
     def test_agregar_vivienda_duplicada_luego_valida(self, mock_print, mock_input):
         """Test que verifica múltiples intentos al agregar vivienda duplicada"""
         self.usuario.agregar_vivienda()  # Primera vivienda
         self.usuario.agregar_vivienda()  # Intenta duplicada, luego agrega otra
         self.assertEqual(mock_input.call_count, 3)
 
-    @patch('builtins.input', side_effect=['vivienda-123', 'vivienda-123'])
-    @patch('builtins.print')
+    @patch("builtins.input", side_effect=["vivienda-123", "vivienda-123"])
+    @patch("builtins.print")
     def test_quitar_vivienda_valida(self, mock_print, mock_input):
         """Test que verifica quitar una vivienda correctamente"""
         self.usuario.agregar_vivienda()  # Primero agregamos
         self.usuario.quitar_vivienda()  # Luego quitamos
         self.assertEqual(mock_input.call_count, 2)
 
-    @patch('builtins.input', side_effect=['vivienda-123', 'vivienda-999', 'vivienda-123'])
-    @patch('builtins.print')
+    @patch(
+        "builtins.input", side_effect=["vivienda-123", "vivienda-999", "vivienda-123"]
+    )
+    @patch("builtins.print")
     def test_quitar_vivienda_inexistente_luego_valida(self, mock_print, mock_input):
         """Test que verifica múltiples intentos al quitar vivienda inexistente"""
         self.usuario.agregar_vivienda()  # Agregamos vivienda-123 (usa primer input)

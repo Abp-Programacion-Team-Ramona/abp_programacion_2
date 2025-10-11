@@ -1,4 +1,4 @@
-from dispositivo import Dispositivo
+from dominio.dispositivo import Dispositivo
 
 
 class AireAcondicionado(Dispositivo):
@@ -18,17 +18,17 @@ class AireAcondicionado(Dispositivo):
         self._velocidad = velocidad
         self._modo = modo
 
-    def get_temperatura(self):
+    @property
+    def temperatura(self):
         return self._temperatura
 
-    def get_velocidad(self):
+    @property
+    def velocidad(self):
         return self._velocidad
 
-    def get_modo(self):
+    @property
+    def modo(self):
         return self._modo
-
-    def is_encendido(self):
-        return self._estado
 
     def encender(self):
         if not self._estado:
