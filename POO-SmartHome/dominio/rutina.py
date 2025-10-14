@@ -1,5 +1,4 @@
 import uuid
-from datetime import time
 
 
 class Rutina:
@@ -7,13 +6,15 @@ class Rutina:
         self,
         id: uuid,
         id_dispositivo: uuid,
-        horario_inicio: time,
-        horario_apagado: time,
-        horario_encendido: time,
+        descripcion: str,
+        horario_inicio: str,
+        horario_apagado: str,
+        horario_encendido: str,
         estado_rutina: bool,
     ):
         self.__id = id
         self.__id_dispositivo = id_dispositivo
+        self.__descripcion = descripcion
         self.__horario_inicio = horario_inicio
         self.__horario_apagado = horario_apagado
         self.__horario_encendido = horario_encendido
@@ -24,11 +25,27 @@ class Rutina:
         return self.__id
 
     @property
+    def id_dispositivo(self):
+        return self.__id_dispositivo
+
+    @id_dispositivo.setter
+    def id_dispositivo(self, nuevo_id: uuid):
+        self.__id_dispositivo = nuevo_id
+
+    @property
+    def descripcion(self):
+        return self.__descripcion
+
+    @descripcion.setter
+    def descripcion(self, nueva_descripcion: str):
+        self.__descripcion = nueva_descripcion
+
+    @property
     def horario_inicio(self):
         return self.__horario_inicio
 
     @horario_inicio.setter
-    def horario_inicio(self, nuevo_horario: time):
+    def horario_inicio(self, nuevo_horario: str):
         self.__horario_inicio = nuevo_horario
 
     @property
@@ -36,7 +53,7 @@ class Rutina:
         return self.__horario_apagado
 
     @horario_apagado.setter
-    def horario_apagado(self, nuevo_horario: time):
+    def horario_apagado(self, nuevo_horario: str):
         self.__horario_apagado = nuevo_horario
 
     @property
@@ -44,7 +61,7 @@ class Rutina:
         return self.__horario_encendido
 
     @horario_encendido.setter
-    def horario_encendido(self, nuevo_horario: time):
+    def horario_encendido(self, nuevo_horario: str):
         self.__horario_encendido = nuevo_horario
 
     @property

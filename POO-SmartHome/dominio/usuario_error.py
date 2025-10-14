@@ -1,3 +1,0 @@
-
-class UsuarioError(Exception):
-    pass

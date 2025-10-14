@@ -1,16 +1,19 @@
 import unittest
+import uuid
 from datetime import time
 from rutina import Rutina
 
 
 class TestRutina(unittest.TestCase):
-
     def setUp(self):
         self.rutina = Rutina(
-            horario_inicio=time(8, 0),
-            horario_apagado=time(23, 0),
-            horario_encendido=time(18, 0),
-            estado_rutina=False
+            id=uuid.uuid4,
+            id_dispositivo=uuid.uuid4,
+            descripcion="Definicion",
+            horario_inicio="00:00",
+            horario_apagado="00:00",
+            horario_encendido="00:00",
+            estado_rutina=False,
         )
 
     def test_set_horario_inicio(self):

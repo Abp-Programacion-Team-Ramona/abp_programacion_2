@@ -4,11 +4,7 @@ from abc import ABC, abstractmethod
 
 class IDispositivoDAO(ABC):
     @abstractmethod
-    def get(self, id: uuid):
-        pass
-
-    @abstractmethod
-    def get_all(self):
+    def get(self, id: uuid.UUID, tabla_concreta: str, cls):
         pass
 
     @abstractmethod

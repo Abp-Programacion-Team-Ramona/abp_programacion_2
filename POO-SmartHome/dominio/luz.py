@@ -1,4 +1,5 @@
-from dispositivo import Dispositivo
+from dominio.dispositivo import Dispositivo
+
 
 class Luz(Dispositivo):
     tabla = "luces"
@@ -9,12 +10,16 @@ class Luz(Dispositivo):
     def __init__(self, modo=None, intensidad=None, **kwargs):
         super().__init__(**kwargs)
         self._modo = "normal" if modo is None else modo
-        self._intensidad = self.INTENSIDADES_VALIDAS[0] if intensidad is None else intensidad
+        self._intensidad = (
+            self.INTENSIDADES_VALIDAS[0] if intensidad is None else intensidad
+        )
 
-    def get_modo(self):
+    @property
+    def modo(self):
         return self._modo
 
-    def get_intensidad(self):
+    @property
+    def intensidad(self):
         return self._intensidad
 
     def configurar_modo(self, modo):
@@ -28,7 +33,9 @@ class Luz(Dispositivo):
         if intensidad in self.INTENSIDADES_VALIDAS:
             self._intensidad = intensidad
         else:
-            print(f"Intensidad inválida: {intensidad}. Válidas: {self.INTENSIDADES_VALIDAS}")
+            print(
+                f"Intensidad inválida: {intensidad}. Válidas: {self.INTENSIDADES_VALIDAS}"
+            )
 
     def encender(self):
         try:
